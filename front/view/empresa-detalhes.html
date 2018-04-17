@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Empresa CTRL</title>
+    <!-- Bootstrap core CSS-->
+    <link href="./vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="./vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Angular -->
+    <script src="./vendor/angular/angular.min.js"></script>
+    <script src="./vendor/angular/angular-cookies.min.js"></script>
+    <script src="./vendor/angular/angular-locale_pt-br.js"></script>
+    <script src="./front/controller/crud-controller.js"> </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="./vendor/jquery/jquery.min.js"></script>
+    <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Maks-->
+    <script src="./vendor/masks/jquery.mask.js"></script>
+    <script src="./vendor/masks/mask.js"></script>
+    <script src="./vendor/masks/rw-money-mask.min.js"></script>
+  </head>
+
+  <body class="fixed-nav sticky-footer" ng-app="CrudApp">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 15px">
+      <a class="navbar-brand" href="/empresa-consulta">Empresa CTRL</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navegção -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item" ng-controller="emailEmpresa">
+            <a class="nav-link" ng-init="setEmailEmpresa()">
+              <i class="fa fa-fw fa-user"></i> {{login.email}}
+            </a>
+          </li>
+          <!-- Logout -->
+          <li class="nav-item" ng-controller="controlLogout">
+            <a class="nav-link" ng-click="logout()">
+              <i class="fa fa-fw fa-sign-out"></i> Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="content-wrapper" ng-controller="CrudController" style="padding: 10px">
+      <div class="container-fluid">
+        <!-- Área de Cadastro -->
+        <form name="formEmpresa" ng-init="preencheCamposEmpresa()">
+
+          <!-- Botões -->
+          <div class="row">
+            <div class="form-group col-md-12">
+              <button type="button" class="btn btn-success" ng-click="salvaEmpresa()" data-ng-disabled="formEmpresa.$invalid" ng-show="(login.permissao_admin && empresa.id_empresa > 0) || (!login.permissao_admin)"> 
+                <i class="fa fa-fw fa-save"></i> Salvar
+              </button>
+              <button type="button" class="btn btn-danger" ng-click="removeLoginEmpresa()" ng-show="login.permissao_admin && empresa.id_empresa > 0"> 
+                <i class="fa fa-fw fa-trash-o"></i> Excluir
+              </button>
+              <button type="button" class="btn btn-primary float-md-right" ng-click="voltaConsultaEmpresa()" ng-show="login.permissao_admin"> 
+                <i class="fa fa-fw fa-search"></i> Consulta
+              </button>
+            </div>
+          </div>
+
+          <!-- Campos -->
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="nome">Nome *</label>
+              <input type="text" class="form-control" id="nome" name="nome" ng-model="empresa.nome" required>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="telefone">Telefone *</label>
+              <input type="text" class="form-control" id="telefone" name="telefone" ng-model="empresa.telefone" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-2">
+              <label for="cep">CEP *</label>
+              <input type="text" class="form-control" id="cep" name="cep" ng-blur="perquisaCEP()" ng-model="empresa.cep" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="logradouro">Logradouro *</label>
+              <input type="text" class="form-control" id="logradouro" name="logradouro" ng-model="empresa.logradouro" required>
+            </div>
+            <div class="form-group col-md-1">
+              <label for="nro">Número</label>
+              <input type="text" class="form-control" id="nro-endereco" name="nro" ng-model="empresa.nro">
+            </div>
+            <div class="form-group col-md-5">
+              <label for="complemeto">Complemento</label>
+              <input type="text" class="form-control" id="complemento" name="complemeto" ng-model="empresa.complemento">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="bairro">Bairro *</label>
+              <input type="text" class="form-control" id="bairro" name="bairro" ng-model="empresa.bairro" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="cidade">Cidade *</label>
+              <input type="text" class="form-control" id="cidade" name="cidade" ng-model="empresa.cidade" required>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="uf">Estado *</label>
+              <select class="form-control" id="uf" name="uf" ng-model="empresa.uf" ng-disabled="ng_editavel" required>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espirito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select> 
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="container-fluid" ng-hide="!empresa.id_empresa > 0">
+        <h1 style="margin-top: 15px"> Funcionários </h1>
+
+        <form name="formFuncionario" style="margin-top: 15px">
+          
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="nome">Nome *</label>
+              <input type="text" class="form-control" id="nome" name="nome" ng-model="funcionario.nome" required>
+            </div>
+            <div class="form-group col-md-3" ng-init="consultaCargo()">
+              <label for="cargo">Cargo *</label>
+              <select class="form-control" id="cargo" name="cargo" ng-model="funcionario.id_cargo" ng-disabled="ng_editavel" required>
+                <option ng-repeat="cargo in listaCargo" ng-value="{{cargo.id_cargo}}"> {{cargo.descricao}} </option>
+              </select> 
+            </div>
+            <div class="form-group col-md-3">
+              <label for="salario">Salário *</label>
+              <input type="text" class="form-control" id="salario" name="salario" ng-model="funcionario.salario" money-mask money-mask-prepend="R$" required>
+            </div>     
+          </div>
+
+          <div class="row">
+            <div class="col-md-9">
+              <button type="button" class="btn btn-success" ng-click="salvaFuncionario()" data-ng-disabled="formFuncionario.$invalid"> 
+                <i class="fa fa-fw fa-save"></i> Salvar
+              </button>
+              <button type="button" class="btn btn-primary" ng-click="limpaCamposFuncionario()" > 
+                <i class="fa fa-fw fa-eraser"></i> Novo
+              </button>
+            </div>
+          </div>
+        
+        </form>
+
+        <div style="padding-top: 20px">
+          <!-- Campo de filtro -->
+          <div class="form-group">
+            <div class="form-inline">
+              <div>
+                <i class="fa fa-fw fa-search"></i>
+                <input type="text" class="form-control" placeholder="Filtrar tabela" ng-model="filtro">
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabela -->    
+          <div>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col" ng-click="sort('nome', true)">Nome
+                    <i ng-class="{'fa fa-fw fa-angle-up':isSortUp('nome'),'fa fa-fw fa-angle-down':isSortDown('nome')}"></i>
+                  </th>
+                  <th scope="col" ng-click="sort('cargo_descricao', true)">Cargo
+                    <i ng-class="{'fa fa-fw fa-angle-up':isSortUp('cargo_descricao'),'fa fa-fw fa-angle-down':isSortDown('cargo_descricao')}"></i>
+                  </th>
+                  <th scope="col" ng-click="sort('salario', false)">Salário
+                    <i ng-class="{'fa fa-fw fa-angle-up':isSortUp('salario'),'fa fa-fw fa-angle-down':isSortDown('salario')}"></i>
+                  </th>
+                  <th scope="col" style="width: 20px">Editar</th>
+                  <th scope="col" style="width: 20px">Excluir</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-show="listaFuncionario.length <= 0">
+                  <td colspan="6" class="align-center">Nenhum funcionário encontrado!</td>
+                </tr>
+              <tbody>
+              </tbody>
+                <tr ng-repeat="funcionario in listaFuncionario = (funcionarios | filter:filtro |  orderBy:(ordem + sortField))">
+                  <td>{{funcionario.nome}}</td>
+                  <td>{{funcionario.cargo_descricao}}</td>
+                  <td>{{funcionario.salario | currency:'R$ '}}</td>
+                  <td>
+                    <button class="btn btn-primary" ng-click="preencheCamposFuncionario($index)">
+                      <i class="fa fa-fw fa-edit"></i>
+                    </button>
+                  </td>
+                  <td>
+                    <button class="btn btn-danger" ng-click="removeFuncionario($index)">
+                      <i class="fa fa-fw fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>

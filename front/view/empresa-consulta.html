@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Empresa CTRL</title>
+    <!-- Bootstrap core CSS-->
+    <link href="./vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="./vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Angular -->
+    <script src="./vendor/angular/angular.min.js"></script>
+    <script src="./vendor/angular/angular-cookies.min.js"></script>
+    <script src="./vendor/angular/angular-locale_pt-br.js"></script>
+    <script src="./front/controller/crud-controller.js"> </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="./vendor/jquery/jquery.min.js"></script>
+    <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Maks-->
+    <script src="./vendor/masks/rw-money-mask.min.js"></script>
+  </head>
+
+  <body class="fixed-nav sticky-footer" ng-app="CrudApp">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/empresa-consulta">Empresa CTRL</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item" ng-controller="emailEmpresa">
+            <a class="nav-link" ng-init="setEmailEmpresa()">
+              <i class="fa fa-fw fa-user"></i> {{login.email}}
+            </a>
+          </li>
+          <!-- Logout -->
+          <li class="nav-item" ng-controller="controlLogout">
+            <a class="nav-link" ng-click="logout()">
+              <i class="fa fa-fw fa-sign-out"></i> Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+      
+    <div ng-controller="CrudController" data-ng-init="consultaEmpresa()" style="padding: 25px">
+
+      <!-- Campo de filtro -->
+      <div class="form-group">
+        <div class="form-inline ">
+          <div>
+            <i class="fa fa-fw fa-search"></i>
+            <input type="text" class="form-control" placeholder="Filtrar tabela" ng-model="filtro">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela -->    
+      <div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col" ng-click="sort('email', true)">E-mail
+                <i ng-class="{'fa fa-fw fa-angle-up':isSortUp('email'),'fa fa-fw fa-angle-down':isSortDown('email')}"></i>
+              </th>
+              <th scope="col" ng-click="sort('nome', true)">Nome
+                <i ng-class="{'fa fa-fw fa-angle-up':isSortUp('nome'),'fa fa-fw fa-angle-down':isSortDown('nome')}"></i>
+              </th>
+              <th scope="col" ng-click="sort('telefone', false)">Telefone
+                <i ng-class="{'fa fa-fw fa-angle-up':isSortUp('telefone'),'fa fa-fw fa-angle-down':isSortDown('telefone')}"></i>
+              </th>
+              <th scope="col" ng-click="sort('cep', false)">CEP
+                <i ng-class="{'fa fa-fw fa-angle-up':isSortUp('cep'),'fa fa-fw fa-angle-down':isSortDown('cep')}"></i>
+              </th>
+              <th scope="col" style="width: 20px">Detalhes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-show="listaEmpresa.length <= 0">
+              <td colspan="6" class="align-center">Nenhuma encontrada encontrado!</td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr ng-repeat="empresa in listaEmpresa = (empresas | filter: filtro:['email','nome','telefone','cep'] |  orderBy: (ordem + sortField))">
+              <td>{{empresa.email}}</td>
+              <td>{{empresa.nome}}</td>
+              <td>{{empresa.telefone|maskTelefone}}</td>
+              <td>{{empresa.cep|maskCEP}}</td>
+              <td>
+                <button ng-click="detalhaEmpresa($index)" class="btn btn-primary">
+                  <i class="fa fa-fw fa-info"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </body>
+
+</html>

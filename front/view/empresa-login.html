@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Empresa CTRL</title>
+    <!-- Bootstrap core CSS-->
+    <link href="./vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="./vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Angular -->
+    <script src="./vendor/angular/angular.min.js"></script>
+    <script src="./vendor/angular/angular-cookies.min.js"></script>
+    <script src="./vendor/angular/angular-locale_pt-br.js"></script>
+    <script src="./front/controller/crud-controller.js"> </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="./vendor/jquery/jquery.min.js"></script>
+    <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Maks-->
+    <script src="./vendor/masks/rw-money-mask.min.js"></script>
+  </head>
+
+  <body class="fixed-nav sticky-footer" ng-app="CrudApp">
+    <div class="container-fluid" ng-controller="CrudControllerLogin" style="padding: 35px">
+      <form>
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="email">Endereço de e-mail</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Insira o e-mail da empresa" ng-model="login.email">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="senha">Senha</label>
+            <input type="password" class="form-control" id="senha" name="senha" placeholder="Insira a senha" ng-model="login.senha" ng-enter="entrar()">
+          </div>
+        </div>
+        <div class="form-inline">
+          <button type="button" class="btn btn-success" ng-click="entrar()">
+            <i class="fa fa-fw fa-sign-in"></i> Entrar
+          </button>
+          <div style="margin-left: 30px">
+            <a href="/empresa-cadastro" id="link-cadastrar">Não tenho uma conta</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </body>
+
+</html>
